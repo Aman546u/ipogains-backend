@@ -25,8 +25,27 @@ app.use(helmet({
 }));
 
 // CORS configuration - Allow frontend to access backend
+const allowedOrigins = [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    process.env.FRONTEND_URL
+].filter(Boolean).map(url => url.replace(/\/$/, "")); // Remove trailing slashes
+
 const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5500',
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is allowed (comparing without trailing slashes)
+        const cleanOrigin = origin.replace(/\/$/, "");
+        if (allowedOrigins.includes(cleanOrigin)) {
+            callback(null, true);
+        } else {
+            console.log('⚠️ CORS BLOCKED:', origin);
+            console.log('✅ Allowed:', allowedOrigins);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
