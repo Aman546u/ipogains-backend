@@ -13,43 +13,36 @@ const ipoSchema = new mongoose.Schema({
     category: {
         type: String,
         enum: ['Mainboard', 'SME'],
-        required: true
+
     },
     sector: {
-        type: String,
-        required: true
+        type: String
     },
 
     // Price Details
     priceRange: {
-        min: { type: Number, required: true },
-        max: { type: Number, required: true }
+        min: { type: Number },
+        max: { type: Number }
     },
     lotSize: {
-        type: Number,
-        required: true
+        type: Number
     },
     minInvestment: {
-        type: Number,
-        required: true
+        type: Number
     },
 
     // Dates
     openDate: {
-        type: Date,
-        required: true
+        type: Date
     },
     closeDate: {
-        type: Date,
-        required: true
+        type: Date
     },
     allotmentDate: {
-        type: Date,
-        required: true
+        type: Date
     },
     listingDate: {
-        type: Date,
-        required: true
+        type: Date
     },
 
     // Status
@@ -103,7 +96,7 @@ const ipoSchema = new mongoose.Schema({
 
     // GMP Data
     gmp: [{
-        value: { type: Number, required: true },
+        value: { type: Number },
         percentage: { type: Number },
         date: { type: Date, default: Date.now }
     }],
@@ -131,12 +124,10 @@ const ipoSchema = new mongoose.Schema({
 
     // Issue Details
     issueSize: {
-        type: Number,
-        required: true
+        type: Number
     },
     faceValue: {
-        type: Number,
-        required: true
+        type: Number
     },
 
     // Lead Managers
@@ -144,8 +135,7 @@ const ipoSchema = new mongoose.Schema({
         type: String
     }],
     registrar: {
-        type: String,
-        required: true
+        type: String
     },
     allotmentLink: {
         type: String, // Direct link to registrar allotment page
