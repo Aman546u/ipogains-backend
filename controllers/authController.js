@@ -38,79 +38,50 @@ exports.register = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Check if email is configured
-        const { isEmailConfigured } = require('../utils/email');
-        const emailConfigured = isEmailConfigured();
+
 
         let user;
 
-        if (emailConfigured) {
-            // Email configured - send OTP
-            const otp = generateOTP();
-            const otpExpiry = new Date(Date.now() + OTP.EXPIRE_MINUTES * 60 * 1000);
+        // Always auto-verify user regardless of email configuration
+        user = new User({
+            email,
+            password: hashedPassword,
+            role: USER_ROLES.USER,
+            isVerified: true  // Auto-verify
+        });
 
-            user = new User({
-                email,
-                password: hashedPassword,
-                role: USER_ROLES.USER,
-                isVerified: false,
-                otp: {
-                    code: otp,
-                    expiresAt: otpExpiry
-                }
-            });
+        await user.save();
 
-            await user.save();
-            await sendOTP(email, otp);
-
-            res.status(201).json({
-                success: true,
-                message: 'Registration successful. Please verify your email with OTP.',
-                requiresOTP: true,
-                userId: user._id
-            });
-        } else {
-            // Email NOT configured - auto-verify user
-            user = new User({
-                email,
-                password: hashedPassword,
-                role: USER_ROLES.USER,
-                isVerified: true  // Auto-verify
-            });
-
-            await user.save();
-
-            // Auto-subscribe user to notifications
-            try {
-                const existingSubscriber = await Subscriber.findOne({ email: email.toLowerCase() });
-                if (!existingSubscriber) {
-                    const subscriber = new Subscriber({
-                        email: email.toLowerCase(),
-                        source: 'registration',
-                        userId: user._id
-                    });
-                    await subscriber.save();
-                    console.log(`✅ Auto-subscribed new user: ${email}`);
-                }
-            } catch (subError) {
-                console.error('Auto-subscribe error (non-blocking):', subError.message);
+        // Auto-subscribe user to notifications
+        try {
+            const existingSubscriber = await Subscriber.findOne({ email: email.toLowerCase() });
+            if (!existingSubscriber) {
+                const subscriber = new Subscriber({
+                    email: email.toLowerCase(),
+                    source: 'registration',
+                    userId: user._id
+                });
+                await subscriber.save();
+                console.log(`✅ Auto-subscribed new user: ${email}`);
             }
-
-            // Generate token immediately
-            const token = generateToken(user._id, user.role);
-
-            res.status(201).json({
-                success: true,
-                message: 'Registration successful! You can now login.',
-                requiresOTP: false,
-                token,
-                user: {
-                    id: user._id,
-                    email: user.email,
-                    role: user.role
-                }
-            });
+        } catch (subError) {
+            console.error('Auto-subscribe error (non-blocking):', subError.message);
         }
+
+        // Generate token immediately
+        const token = generateToken(user._id, user.role);
+
+        res.status(201).json({
+            success: true,
+            message: 'Registration successful! You can now login.',
+            requiresOTP: false,
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                role: user.role
+            }
+        });
     } catch (error) {
         console.error('Registration error:', error);
         res.status(500).json({
