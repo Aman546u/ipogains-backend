@@ -182,6 +182,8 @@ ipoSchema.pre('save', async function () {
             this.status = 'open';
         } else if (this.openDate && now < this.openDate) {
             this.status = 'upcoming';
+        } else if (!this.listingPrice && !this.listingDate && !this.closeDate && !this.openDate) {
+            this.status = 'upcoming'; // Default for drafts
         }
     }
 

@@ -6,7 +6,7 @@ const { IPO_STATUS, IPO_CATEGORY } = require('../config/constants');
 // @access  Public
 exports.getAllIPOs = async (req, res) => {
     try {
-        const { status, category, sector, sort, page = 1, limit = 20 } = req.query;
+        const { status, category, sector, sort, page = 1, limit = 100 } = req.query;
 
         // Build query
         let query = {};
