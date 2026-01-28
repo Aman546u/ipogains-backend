@@ -27,7 +27,7 @@ if (isEmailConfigured()) {
 
 // Get site URL
 const getSiteUrl = () => {
-    return process.env.FRONTEND_URL || 'http://localhost:3000';
+    return process.env.FRONTEND_URL || 'http://localhost:5500';
 };
 
 // Email templates
