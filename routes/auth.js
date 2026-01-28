@@ -6,6 +6,13 @@ const { auth } = require('../middleware/auth');
 const { validate } = require('../middleware/validator');
 
 // Validation rules
+router.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Auth API is running. Use POST /login, /register, /forgot-password endpoints.'
+    });
+});
+
 const registerValidation = [
     body('email')
         .isEmail()

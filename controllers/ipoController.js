@@ -49,7 +49,10 @@ exports.getAllIPOs = async (req, res) => {
             total,
             page: parseInt(page),
             pages: Math.ceil(total / parseInt(limit)),
-            ipos
+            ipos: ipos.map(i => {
+                const obj = i.toObject({ virtuals: true });
+                return { ...obj, id: i._id.toString(), _id: i._id.toString() };
+            })
         });
     } catch (error) {
         console.error('Get IPOs error:', error);
@@ -76,9 +79,10 @@ exports.getIPOById = async (req, res) => {
 
         await ipo.save(); // Update status
 
+        const ipoObj = ipo.toObject({ virtuals: true });
         res.json({
             success: true,
-            ipo
+            ipo: { ...ipoObj, id: ipo._id.toString(), _id: ipo._id.toString() }
         });
     } catch (error) {
         console.error('Get IPO error:', error);

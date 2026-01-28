@@ -25,9 +25,14 @@ if (isEmailConfigured()) {
     console.log('✅ Notification email service configured');
 }
 
-// Get site URL
-const getSiteUrl = () => {
-    return process.env.FRONTEND_URL || 'http://localhost:5500';
+// Get frontend URL (for user navigation)
+const getFrontendUrl = () => {
+    return process.env.FRONTEND_PUBLIC_URL || 'https://ipogains.com';
+};
+
+// Get backend API URL (for unsubscribe/api calls)
+const getBackendUrl = () => {
+    return process.env.API_URL || 'http://localhost:3000';
 };
 
 // Email templates
@@ -84,7 +89,7 @@ const emailTemplates = {
                     </div>
                     
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${getSiteUrl()}/ipos.html" 
+                        <a href="${getFrontendUrl()}/ipos.html" 
                            style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
                             View IPO Details →
                         </a>
@@ -94,7 +99,7 @@ const emailTemplates = {
                 <!-- Footer -->
                 <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
                     <p style="margin: 0 0 10px;">You received this email because you subscribed to IPOGains notifications.</p>
-                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <a href="${getBackendUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
                     <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
                 </div>
             </div>
@@ -135,7 +140,7 @@ const emailTemplates = {
                     ` : ''}
                     
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${getSiteUrl()}/ipos.html" 
+                        <a href="${getFrontendUrl()}/ipos.html" 
                            style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
                             View Details →
                         </a>
@@ -143,7 +148,7 @@ const emailTemplates = {
                 </div>
                 
                 <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
-                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <a href="${getBackendUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
                     <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
                 </div>
             </div>
@@ -204,7 +209,7 @@ const emailTemplates = {
                     ` : ''}
                     
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${getSiteUrl()}/ipos.html" 
+                        <a href="${getFrontendUrl()}/ipos.html" 
                            style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
                             Explore All IPOs →
                         </a>
@@ -212,7 +217,7 @@ const emailTemplates = {
                 </div>
                 
                 <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
-                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <a href="${getBackendUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
                     <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
                 </div>
             </div>
@@ -242,7 +247,7 @@ const emailTemplates = {
                     </div>
                     
                     <div style="margin: 30px 0;">
-                        <a href="${getSiteUrl()}" 
+                        <a href="${getFrontendUrl()}" 
                            style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
                             Explore IPOs →
                         </a>
@@ -250,7 +255,7 @@ const emailTemplates = {
                 </div>
                 
                 <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
-                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <a href="${getBackendUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
                     <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
                 </div>
             </div>
@@ -281,7 +286,7 @@ const emailTemplates = {
                     </div>
 
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${getSiteUrl()}/gmp-detail.html?id=${ipo._id}" 
+                        <a href="${getFrontendUrl()}/gmp-detail.html?id=${ipo._id}" 
                            style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
                             View GMP Trend →
                         </a>
@@ -289,7 +294,7 @@ const emailTemplates = {
                 </div>
                 
                 <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
-                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #f59e0b; text-decoration: none;">Unsubscribe</a>
+                    <a href="${getBackendUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #f59e0b; text-decoration: none;">Unsubscribe</a>
                     <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
                 </div>
             </div>
@@ -329,7 +334,7 @@ const emailTemplates = {
                     </p>
 
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="${getSiteUrl()}" 
+                        <a href="${getFrontendUrl()}" 
                            style="display: inline-block; padding: 12px 30px; background: #374151; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
                             Go to Dashboard
                         </a>
