@@ -150,6 +150,113 @@ const emailTemplates = {
         `
     }),
 
+    // Daily Digest
+    dailyDigest: (ipos, changes, unsubscribeToken) => ({
+        subject: `📬 Your Daily IPO Digest - IPOGains`,
+        html: `
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a2e; color: #ffffff; border-radius: 10px; overflow: hidden;">
+                <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); padding: 30px; text-align: center;">
+                    <h1 style="margin: 0; font-size: 24px;">📬 Daily IPO Digest</h1>
+                    <p style="margin: 10px 0 0; opacity: 0.9;">${new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                </div>
+                
+                <div style="padding: 30px;">
+                    ${ipos.open?.length > 0 ? `
+                        <div style="margin-bottom: 25px;">
+                            <h3 style="color: #10b981; margin: 0 0 15px;">🟢 Currently Open (${ipos.open.length})</h3>
+                            ${ipos.open.map(ipo => `
+                                <div style="background: #252542; border-radius: 8px; padding: 15px; margin-bottom: 10px;">
+                                    <strong style="color: #fff;">${ipo.companyName}</strong>
+                                    <span style="float: right; color: #10b981;">₹${ipo.priceRange.min}-${ipo.priceRange.max}</span>
+                                    <p style="margin: 5px 0 0; color: #9ca3af; font-size: 13px;">
+                                        Closes: ${new Date(ipo.closeDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} 
+                                        | Subscription: ${ipo.subscription?.total?.toFixed(2) || 0}x
+                                    </p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    ${ipos.upcoming?.length > 0 ? `
+                        <div style="margin-bottom: 25px;">
+                            <h3 style="color: #f59e0b; margin: 0 0 15px;">🟡 Upcoming (${ipos.upcoming.length})</h3>
+                            ${ipos.upcoming.slice(0, 5).map(ipo => `
+                                <div style="background: #252542; border-radius: 8px; padding: 15px; margin-bottom: 10px;">
+                                    <strong style="color: #fff;">${ipo.companyName}</strong>
+                                    <p style="margin: 5px 0 0; color: #9ca3af; font-size: 13px;">
+                                        Opens: ${new Date(ipo.openDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    ${changes?.length > 0 ? `
+                        <div style="margin-bottom: 25px;">
+                            <h3 style="color: #3b82f6; margin: 0 0 15px;">📝 Recent Updates</h3>
+                            ${changes.map(change => `
+                                <div style="background: #252542; border-radius: 8px; padding: 15px; margin-bottom: 10px; border-left: 3px solid #3b82f6;">
+                                    <strong style="color: #fff;">${change.title}</strong>
+                                    <p style="margin: 5px 0 0; color: #9ca3af; font-size: 13px;">${change.message}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${getSiteUrl()}/ipos.html" 
+                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                            Explore All IPOs →
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
+                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
+                </div>
+            </div>
+        `
+    }),
+
+    // Welcome email
+    welcome: (email, unsubscribeToken) => ({
+        subject: `✅ Welcome to IPOGains - Subscription Confirmed!`,
+        html: `
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a2e; color: #ffffff; border-radius: 10px; overflow: hidden;">
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 40px; text-align: center;">
+                    <h1 style="margin: 0; font-size: 28px;">✅ Subscription Confirmed!</h1>
+                </div>
+                
+                <div style="padding: 30px; text-align: center;">
+                    <h2 style="color: #fff; margin: 0 0 20px;">Welcome to IPOGains!</h2>
+                    <p style="color: #a0a0a0; line-height: 1.6;">
+                        Thank you for subscribing to our IPO notifications. You'll now receive:
+                    </p>
+                    
+                    <div style="text-align: left; background: #252542; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                        <p style="margin: 10px 0; color: #fff;">✓ New IPO alerts</p>
+                        <p style="margin: 10px 0; color: #fff;">✓ IPO status updates (Open/Closed/Listed)</p>
+                        <p style="margin: 10px 0; color: #fff;">✓ GMP updates</p>
+                        <p style="margin: 10px 0; color: #fff;">✓ Daily digest with all IPO activity</p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <a href="${getSiteUrl()}" 
+                           style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                            Explore IPOs →
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="background: #0f0f1a; padding: 20px; text-align: center; font-size: 12px; color: #666;">
+                    <a href="${getSiteUrl()}/api/subscribers/unsubscribe/${unsubscribeToken}" style="color: #10b981; text-decoration: none;">Unsubscribe</a>
+                    <p style="margin: 15px 0 0;">© 2026 IPOGains. All rights reserved.</p>
+                </div>
+            </div>
+        `
+    }),
+
     // GMP Update
     gmpUpdate: (ipo, oldGmp, newGmp, unsubscribeToken) => ({
         subject: `📈 GMP Alert: ${ipo.companyName} - IPOGains`,
