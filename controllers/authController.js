@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Subscriber = require('../models/Subscriber');
 const { sendOTP } = require('../utils/email');
 const { USER_ROLES, OTP } = require('../config/constants');
+const notificationService = require('../services/notificationService');
 
 // Generate OTP
 const generateOTP = () => {
@@ -207,6 +208,11 @@ exports.login = async (req, res) => {
         }
 
         const token = generateToken(user._id, user.role);
+
+        // Send login notification (non-blocking)
+        notificationService.sendLoginNotification(user).catch(err =>
+            console.error('Login notification error:', err.message)
+        );
 
         res.json({
             success: true,

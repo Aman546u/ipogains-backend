@@ -204,7 +204,10 @@ exports.addGMP = async (req, res) => {
         // Create notification for significant GMP change (>10% difference)
         if (Math.abs(value - previousGMP) > previousGMP * 0.1 || previousGMP === 0) {
             try {
-                await notificationService.createNotification('gmp_update', ipo, previousGMP, value);
+                const notification = await notificationService.createNotification('gmp_update', ipo, previousGMP, value);
+                if (notification) {
+                    await notificationService.sendBulkNotification(notification, ipo);
+                }
             } catch (notifError) {
                 console.error('GMP notification error (non-blocking):', notifError.message);
             }
