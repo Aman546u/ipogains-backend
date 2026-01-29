@@ -26,11 +26,15 @@ if (isEmailConfigured()) {
 }
 
 const sendOTP = async (email, otp) => {
-  // If email not configured, just log the OTP and return true
+  // If email not configured
   if (!transporter) {
-    console.log(`📧 Email not configured. OTP for ${email}: ${otp}`);
+    if (process.env.NODE_ENV === 'production') {
+      console.error('❌ CRITICAL: Email service not configured in PRODUCTION. Cannot send OTP.');
+      return false;
+    }
+    console.log(`📧 Email not configured (DEV MODE). OTP for ${email}: ${otp}`);
     console.log('💡 Configure EMAIL_USER and EMAIL_PASSWORD in .env to enable email');
-    return true; // Return true so registration still works
+    return true; // Return true in DEV so development can proceed without email
   }
 
   const mailOptions = {
