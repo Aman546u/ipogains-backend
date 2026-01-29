@@ -32,6 +32,7 @@ const allowedOrigins = [
     'https://www.ipogains.com',
     'https://ipogains.com',
     'https://ipogains-frontend.vercel.app',
+    'https://aman546u.github.io',
     process.env.FRONTEND_URL
 ].filter(Boolean).map(url => url.replace(/\/$/, "")); // Remove trailing slashes
 
