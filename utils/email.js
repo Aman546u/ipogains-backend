@@ -12,7 +12,14 @@ const isEmailConfigured = () => {
 // Create transporter only if email is configured
 let transporter = null;
 if (isEmailConfigured()) {
-  const port = parseInt(process.env.EMAIL_PORT) || 587;
+  // PREFER Port 465 for Gmail on Cloud Hosting (to avoid timeouts)
+  let defaultPort = 587;
+  if (process.env.EMAIL_HOST === 'smtp.gmail.com') {
+    defaultPort = 465;
+  }
+
+  const port = parseInt(process.env.EMAIL_PORT) || defaultPort;
+
   transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: port,
@@ -24,7 +31,9 @@ if (isEmailConfigured()) {
     // Add timeouts to fail faster if connection is blocked
     connectionTimeout: 10000,
     greetingTimeout: 5000,
-    socketTimeout: 10000
+    socketTimeout: 10000,
+    debug: true, // Show detailed debug info
+    logger: true // Log info to console
   });
   console.log(`✅ Email service configured on port ${port} (secure: ${port === 465})`);
 } else {
