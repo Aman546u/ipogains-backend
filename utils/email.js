@@ -40,7 +40,7 @@ const sendOTP = async (email, otp) => {
     }
     console.log(`📧 Email not configured (DEV MODE). OTP for ${email}: ${otp}`);
     console.log('💡 Configure EMAIL_USER and EMAIL_PASSWORD in .env to enable email');
-    return true; // Return true in DEV so development can proceed without email
+    return { success: true }; // Return true in DEV so development can proceed without email
   }
 
   const mailOptions = {
@@ -63,11 +63,11 @@ const sendOTP = async (email, otp) => {
   try {
     await transporter.sendMail(mailOptions);
     console.log(`✅ OTP email sent to ${email}`);
-    return true;
+    return { success: true };
   } catch (error) {
     console.error('❌ Email send error:', error.message);
     console.log(`📧 OTP for ${email}: ${otp}`);
-    return false;
+    return { success: false, error: error.message };
   }
 };
 

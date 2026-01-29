@@ -341,12 +341,12 @@ exports.forgotPassword = async (req, res) => {
         await user.save();
 
         // Send OTP email
-        const emailSent = await sendOTP(email, otp);
+        const emailResult = await sendOTP(email, otp);
 
-        if (!emailSent) {
+        if (!emailResult.success) {
             return res.status(500).json({
                 success: false,
-                error: 'Failed to send OTP email. Please try again later.'
+                error: `Failed to send OTP email: ${emailResult.error || 'Unknown error'}`
             });
         }
 
