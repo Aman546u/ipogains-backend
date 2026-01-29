@@ -12,30 +12,37 @@ const isEmailConfigured = () => {
 // Create transporter only if email is configured
 let transporter = null;
 if (isEmailConfigured()) {
-  // PREFER Port 465 for Gmail on Cloud Hosting (to avoid timeouts)
-  let defaultPort = 587;
-  if (process.env.EMAIL_HOST === 'smtp.gmail.com') {
-    defaultPort = 465;
+  // PREFER 'service: gmail' shorthand for Gmail
+  // This handles the correct ports (465/587) and security settings automatically
+  if (process.env.EMAIL_HOST === 'smtp.gmail.com' || (process.env.EMAIL_USER && process.env.EMAIL_USER.endsWith('@gmail.com'))) {
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      },
+      debug: true,
+      logger: true
+    });
+    console.log('✅ Email service configured using Gmail Service Wrapper');
+  } else {
+    const port = parseInt(process.env.EMAIL_PORT) || 587;
+    transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: port,
+      secure: port === 465,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      },
+      connectionTimeout: 10000,
+      greetingTimeout: 5000,
+      socketTimeout: 10000,
+      debug: true,
+      logger: true
+    });
+    console.log(`✅ Email service configured on port ${port} (secure: ${port === 465})`);
   }
-
-  const port = parseInt(process.env.EMAIL_PORT) || defaultPort;
-
-  transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: port,
-    secure: port === 465, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
-    },
-    // Add timeouts to fail faster if connection is blocked
-    connectionTimeout: 10000,
-    greetingTimeout: 5000,
-    socketTimeout: 10000,
-    debug: true, // Show detailed debug info
-    logger: true // Log info to console
-  });
-  console.log(`✅ Email service configured on port ${port} (secure: ${port === 465})`);
 } else {
   console.log('⚠️  Email service not configured - OTP emails will be skipped');
 }
