@@ -1,29 +1,11 @@
-const nodemailer = require('nodemailer');
+const emailUtils = require('../utils/email');
 const Subscriber = require('../models/Subscriber');
 const Notification = require('../models/Notification');
 
 // Check if email is configured
 const isEmailConfigured = () => {
-    return process.env.EMAIL_USER &&
-        process.env.EMAIL_PASSWORD &&
-        process.env.EMAIL_USER !== 'your-email@gmail.com' &&
-        process.env.EMAIL_PASSWORD !== 'your-16-character-app-password';
+    return emailUtils.isEmailConfigured();
 };
-
-// Create transporter
-let transporter = null;
-if (isEmailConfigured()) {
-    transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-        port: process.env.EMAIL_PORT || 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASSWORD
-        }
-    });
-    console.log('✅ Notification email service configured');
-}
 
 // Get frontend URL (for user navigation)
 const getFrontendUrl = () => {
@@ -351,23 +333,7 @@ const emailTemplates = {
 
 // Send email to a single subscriber
 const sendEmail = async (to, template) => {
-    if (!transporter) {
-        console.log(`📧 Email not configured. Would send to ${to}: ${template.subject}`);
-        return { success: true, skipped: true };
-    }
-
-    try {
-        await transporter.sendMail({
-            from: `"IPOGains" <${process.env.EMAIL_USER}>`,
-            to: to,
-            subject: template.subject,
-            html: template.html
-        });
-        return { success: true };
-    } catch (error) {
-        console.error(`❌ Failed to send email to ${to}:`, error.message);
-        return { success: false, error: error.message };
-    }
+    return await emailUtils.sendEmail(to, template.subject, template.html);
 };
 
 // Send welcome email to new subscriber

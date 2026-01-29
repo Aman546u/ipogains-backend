@@ -86,4 +86,4 @@ const sendAllotmentNotification = async (email, ipoName, status) => {
   return await sendEmail(email, subject, htmlContent);
 };
 
-module.exports = { sendOTP, sendAllotmentNotification, isEmailConfigured };
+module.exports = { sendOTP, sendAllotmentNotification, isEmailConfigured, sendEmail };
