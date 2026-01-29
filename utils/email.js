@@ -9,18 +9,24 @@ const isEmailConfigured = () => {
 };
 
 // Create transporter only if email is configured
+// Create transporter only if email is configured
 let transporter = null;
 if (isEmailConfigured()) {
+  const port = parseInt(process.env.EMAIL_PORT) || 587;
   transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
+    port: port,
+    secure: port === 465, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD
-    }
+    },
+    // Add timeouts to fail faster if connection is blocked
+    connectionTimeout: 10000,
+    greetingTimeout: 5000,
+    socketTimeout: 10000
   });
-  console.log('✅ Email service configured');
+  console.log(`✅ Email service configured on port ${port} (secure: ${port === 465})`);
 } else {
   console.log('⚠️  Email service not configured - OTP emails will be skipped');
 }
