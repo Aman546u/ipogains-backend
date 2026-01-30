@@ -98,6 +98,13 @@ exports.getIPOById = async (req, res) => {
 // @access  Public
 exports.getIPOStats = async (req, res) => {
     try {
+        // Update all IPO statuses first to ensure stats are fresh
+        // The save() call triggers the pre-save hook in the IPO model which recalculates status based on dates
+        const allIPOs = await IPO.find({});
+        for (let ipo of allIPOs) {
+            await ipo.save();
+        }
+
         const totalIPOs = await IPO.countDocuments();
         const openIPOs = await IPO.countDocuments({ status: IPO_STATUS.OPEN });
         const upcomingIPOs = await IPO.countDocuments({ status: IPO_STATUS.UPCOMING });

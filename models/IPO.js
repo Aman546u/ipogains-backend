@@ -173,14 +173,18 @@ ipoSchema.pre('save', async function () {
     if (this.listingPrice) {
         this.status = 'listed';
     } else {
-        // Otherwise, follow date logic
-        if (this.listingDate && now >= this.listingDate) {
+        // Otherwise, follow date logic (Market Timings)
+        const openTime = this.openDate ? new Date(this.openDate).setHours(9, 0, 0, 0) : null;      // 9:00 AM
+        const closeTime = this.closeDate ? new Date(this.closeDate).setHours(17, 0, 0, 0) : null;   // 5:00 PM (17:00)
+        const listingTime = this.listingDate ? new Date(this.listingDate).setHours(10, 0, 0, 0) : null; // 10:00 AM
+
+        if (this.listingDate && now >= listingTime) {
             this.status = 'listed';
-        } else if (this.closeDate && now > this.closeDate) {
+        } else if (this.closeDate && now >= closeTime) { // Changed to >= closeTime to close exactly at 5 PM
             this.status = 'closed';
-        } else if (this.openDate && now >= this.openDate && now <= this.closeDate) {
+        } else if (this.openDate && now >= openTime && (this.closeDate ? now < closeTime : true)) {
             this.status = 'open';
-        } else if (this.openDate && now < this.openDate) {
+        } else if (this.openDate && now < openTime) {
             this.status = 'upcoming';
         } else if (!this.listingPrice && !this.listingDate && !this.closeDate && !this.openDate) {
             this.status = 'upcoming'; // Default for drafts

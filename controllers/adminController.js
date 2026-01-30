@@ -388,6 +388,12 @@ exports.deleteUser = async (req, res) => {
 // @access  Private/Admin
 exports.getDashboardStats = async (req, res) => {
     try {
+        // Update all IPO statuses first to ensure stats are fresh
+        const allIPOs = await IPO.find({});
+        for (let ipo of allIPOs) {
+            await ipo.save();
+        }
+
         const totalUsers = await User.countDocuments();
         const totalIPOs = await IPO.countDocuments();
         const activeIPOs = await IPO.countDocuments({ status: IPO_STATUS.OPEN });
