@@ -46,10 +46,13 @@ const sendEmail = async (to, subject, htmlContent) => {
 const sendOTP = async (email, otp) => {
   const subject = 'Your OTP for IPOGains Login';
   const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <h2 style="color: #22c55e;">IPOGains - Email Verification</h2>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; border: 1px solid #eee; border-radius: 10px; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://raw.githubusercontent.com/Aman546u/ipogains/main/frontend/favicon.png" alt="IPOGains" style="width: 80px; height: 80px;">
+        </div>
+        <h2 style="color: #22c55e; text-align: center;">IPOGains - Email Verification</h2>
         <p>Your One-Time Password (OTP) is:</p>
-        <h1 style="color: #22c55e; font-size: 36px; letter-spacing: 5px; margin: 20px 0;">${otp}</h1>
+        <h1 style="color: #22c55e; font-size: 36px; letter-spacing: 5px; margin: 20px 0; text-align: center;">${otp}</h1>
         <p>This OTP will expire in 10 minutes.</p>
         <p style="font-size: 14px; color: #666;">If you didn't request this, please ignore this email.</p>
         <hr style="border: 1px solid #eee; margin: 30px 0;">
@@ -64,8 +67,11 @@ const sendAllotmentNotification = async (email, ipoName, status) => {
   const subject = `IPO Allotment Update - ${ipoName}`;
   const statusColor = status === 'allotted' ? '#22c55e' : '#ef4444';
   const htmlContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <h2 style="color: #22c55e;">IPOGains - Allotment Update</h2>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; border: 1px solid #eee; border-radius: 10px; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://raw.githubusercontent.com/Aman546u/ipogains/main/frontend/favicon.png" alt="IPOGains" style="width: 80px; height: 80px;">
+        </div>
+        <h2 style="color: #22c55e; text-align: center;">IPOGains - Allotment Update</h2>
         <p>Dear Investor,</p>
         <p>The allotment status for <strong>${ipoName}</strong> has been updated:</p>
         <div style="padding: 15px; border-radius: 8px; background-color: ${statusColor}15; border: 1px solid ${statusColor}; text-align: center; margin: 20px 0;">

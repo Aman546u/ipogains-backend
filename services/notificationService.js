@@ -26,6 +26,9 @@ const emailTemplates = {
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a2e; color: #ffffff; border-radius: 10px; overflow: hidden;">
                 <!-- Header -->
                 <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <img src="https://raw.githubusercontent.com/Aman546u/ipogains/main/frontend/favicon.png" alt="IPOGains" style="width: 60px; height: 60px;">
+                    </div>
                     <h1 style="margin: 0; font-size: 24px;">🚀 New IPO Alert!</h1>
                     <p style="margin: 10px 0 0; opacity: 0.9;">A new IPO has been added to IPOGains</p>
                 </div>
@@ -94,6 +97,9 @@ const emailTemplates = {
         html: `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a2e; color: #ffffff; border-radius: 10px; overflow: hidden;">
                 <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); padding: 30px; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <img src="https://raw.githubusercontent.com/Aman546u/ipogains/main/frontend/favicon.png" alt="IPOGains" style="width: 60px; height: 60px;">
+                    </div>
                     <h1 style="margin: 0; font-size: 24px;">📊 IPO Status Update</h1>
                 </div>
                 
@@ -143,6 +149,9 @@ const emailTemplates = {
         html: `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1a2e; color: #ffffff; border-radius: 10px; overflow: hidden;">
                 <div style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); padding: 30px; text-align: center;">
+                    <div style="margin-bottom: 15px;">
+                        <img src="https://raw.githubusercontent.com/Aman546u/ipogains/main/frontend/favicon.png" alt="IPOGains" style="width: 60px; height: 60px;">
+                    </div>
                     <h1 style="margin: 0; font-size: 24px;">📬 Daily IPO Digest</h1>
                     <p style="margin: 10px 0 0; opacity: 0.9;">${new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</p>
                 </div>
